@@ -43,6 +43,7 @@ open class XMLEncoder {
     public enum NodeEncoding {
         case attribute
         case element
+        case intrinsic
         case both
 
         public static let `default`: NodeEncoding = .element

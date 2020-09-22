@@ -245,6 +245,17 @@ extension XMLKeyedDecodingContainer {
                     }
                 }
             }
+        
+        let intrinsics = container
+            .withShared { keyedBox -> [KeyedBox.Element] in
+                keyedBox.elements[""].map {
+                    if let singleKeyed = $0 as? SingleKeyedBox {
+                        return singleKeyed.element.isNull ? singleKeyed : singleKeyed.element
+                    } else {
+                        return $0
+                    }
+                }
+            }
 
         let attributes = container.withShared { keyedBox in
             keyedBox.attributes[key.stringValue]
@@ -291,6 +302,8 @@ extension XMLKeyedDecodingContainer {
             box = attributeBox
         case .element:
             box = elements
+        case .intrinsic:
+            box = intrinsics
         case .elementOrAttribute:
             guard
                 let anyBox = elements.isEmpty ? attributes.first : elements as Box?

@@ -248,6 +248,7 @@ open class XMLDecoder {
         case attribute
         case element
         case elementOrAttribute
+        case intrinsic
     }
 
     /// The strategy to use in encoding encoding attributes. Defaults to `.deferredToEncoder`.

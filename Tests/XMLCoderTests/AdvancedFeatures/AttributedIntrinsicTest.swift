@@ -59,11 +59,14 @@ private struct FooValueAttribute: Codable, DynamicNodeDecoding {
     }
 
     static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
-        guard key.stringValue == CodingKeys.valueAttribute.stringValue else {
+        switch key {
+        case CodingKeys.valueAttribute:
+            return .attribute
+        case CodingKeys.value:
+            return .intrinsic
+        default:
             return .element
         }
-
-        return .attribute
     }
 }
 
@@ -77,15 +80,26 @@ private struct FooValueElement: Codable {
     }
 }
 
-private struct Foo: Codable, DynamicNodeEncoding, Equatable {
+private struct Foo: Codable, DynamicNodeDecoding, DynamicNodeEncoding, Equatable {
     let id: String
     let value: String
 
     enum CodingKeys: String, CodingKey {
         case id
-        case value = ""
+        case value
     }
 
+    static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
+        switch key {
+        case CodingKeys.id:
+            return .attribute
+        case CodingKeys.value:
+            return .intrinsic
+        default:
+            return .element
+        }
+    }
+    
     static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         switch key {
         case CodingKeys.id:
@@ -96,23 +110,43 @@ private struct Foo: Codable, DynamicNodeEncoding, Equatable {
     }
 }
 
-private struct FooValue: Codable, Equatable {
+private struct FooValue: Codable, DynamicNodeDecoding, Equatable {
     let value: Int
 
     enum CodingKeys: String, CodingKey {
         case value = ""
     }
+    
+    static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
+        switch key {
+        case CodingKeys.value:
+            return .intrinsic
+        default:
+            return .element
+        }
+    }
 }
 
-private struct FooOptional: Codable, DynamicNodeEncoding, Equatable {
+private struct FooOptional: Codable, DynamicNodeDecoding, DynamicNodeEncoding, Equatable {
     let id: String?
     let value: Int
 
     enum CodingKeys: String, CodingKey {
         case id
-        case value = ""
+        case value
     }
 
+    static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
+        switch key {
+        case CodingKeys.id:
+            return .attribute
+        case CodingKeys.value:
+            return .intrinsic
+        default:
+            return .element
+        }
+    }
+    
     static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         switch key {
         case CodingKeys.id:
@@ -123,19 +157,32 @@ private struct FooOptional: Codable, DynamicNodeEncoding, Equatable {
     }
 }
 
-private struct FooEmptyKeyed: Codable, DynamicNodeEncoding, Equatable {
+private struct FooEmptyKeyed: Codable, DynamicNodeDecoding, DynamicNodeEncoding, Equatable {
     let id: String
     let unkeyedValue: Int
 
     enum CodingKeys: String, CodingKey {
         case id
-        case unkeyedValue = ""
+        case unkeyedValue
     }
 
+    static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
+        switch key {
+        case CodingKeys.id:
+            return .attribute
+        case CodingKeys.unkeyedValue:
+            return .intrinsic
+        default:
+            return .element
+        }
+    }
+    
     static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         switch key {
         case CodingKeys.id:
             return .attribute
+        case CodingKeys.unkeyedValue:
+            return .intrinsic
         default:
             return .element
         }
@@ -166,15 +213,26 @@ private struct AppPreview: Codable, Equatable {
     }
 }
 
-private struct PreviewImageTime: Codable, Equatable, DynamicNodeEncoding {
+private struct PreviewImageTime: Codable, Equatable, DynamicNodeDecoding, DynamicNodeEncoding {
     var format: String
     var value: String
 
     enum CodingKeys: String, CodingKey {
         case format
-        case value = ""
+        case value
     }
 
+    static func nodeDecoding(for key: CodingKey) -> XMLDecoder.NodeDecoding {
+        switch key {
+        case CodingKeys.format:
+            return .attribute
+        case CodingKeys.value:
+            return .intrinsic
+        default:
+            return .element
+        }
+    }
+    
     static func nodeEncoding(for key: CodingKey) -> XMLEncoder.NodeEncoding {
         switch key {
         case CodingKeys.format:
